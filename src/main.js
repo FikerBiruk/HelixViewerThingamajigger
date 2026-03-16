@@ -63,14 +63,29 @@ function createBaseMesh(base, position, index, complement) {
 }
 
 function createBond(p1, p2) {
-  const points = [
-    new THREE.Vector3(p1.x, p1.y, p1.z),
-    new THREE.Vector3(p2.x, p2.y, p2.z),
-  ];
+  const start = new THREE.Vector3(p1.x, p1.y, p1.z);
+  const end = new THREE.Vector3(p2.x, p2.y, p2.z);
+  const direction = new THREE.Vector3().subVectors(end, start);
+  const length = direction.length();
+  const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
 
-  const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  const material = new THREE.LineBasicMaterial({ color: 0xdff6ff, transparent: true, opacity: 0.88 });
-  return new THREE.Line(geometry, material);
+  const geometry = new THREE.CylinderGeometry(0.045, 0.045, length, 10);
+  const material = new THREE.MeshStandardMaterial({
+    color: 0xd9fbff,
+    emissive: 0x8be9ff,
+    emissiveIntensity: 0.7,
+    roughness: 0.2,
+    metalness: 0.1,
+    transparent: true,
+    opacity: 0.9,
+  });
+
+  const bond = new THREE.Mesh(geometry, material);
+  bond.position.copy(mid);
+  const up = new THREE.Vector3(0, 1, 0);
+  const quat = new THREE.Quaternion().setFromUnitVectors(up, direction.normalize());
+  bond.setRotationFromQuaternion(quat);
+  return bond;
 }
 
 function createBackboneSegment(start, end) {
@@ -139,11 +154,14 @@ const hover = setupHoverInteraction({
 setupUI({ onGenerate: buildHelix });
 
 let previousTime = performance.now();
+let idleTime = 0;
 function animate(now) {
   const dt = (now - previousTime) / 1000;
   previousTime = now;
+  idleTime += dt;
 
   rootGroup.rotation.y += dt * 0.16;
+  rootGroup.rotation.x = Math.sin(idleTime * 0.38) * 0.035;
   controls.update();
   hover.updateHover();
   composer.render();

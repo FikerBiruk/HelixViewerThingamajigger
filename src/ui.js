@@ -5,15 +5,25 @@ export function setupUI({ onGenerate }) {
   const generateBtn = document.getElementById("generateBtn");
   const statusText = document.getElementById("statusText");
 
+  function updateStatus(message) {
+    statusText.style.opacity = "0";
+    window.setTimeout(() => {
+      statusText.textContent = message;
+      statusText.style.opacity = "1";
+    }, 90);
+  }
+
   function emitGenerate() {
     const cleaned = sanitizeSequence(sequenceInput.value);
     const finalSequence = cleaned || getDefaultSequence();
     const usingDefault = !cleaned;
     onGenerate(finalSequence);
 
-    statusText.textContent = usingDefault
-      ? `Using default sequence (${finalSequence.length} bases)`
-      : `Loaded ${finalSequence.length} bases`;
+    updateStatus(
+      usingDefault
+        ? `Using default sequence (${finalSequence.length} bases)`
+        : `Loaded ${finalSequence.length} bases`
+    );
   }
 
   generateBtn.addEventListener("click", emitGenerate);

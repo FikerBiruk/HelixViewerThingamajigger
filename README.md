@@ -31,7 +31,7 @@ A complete client-side web project that renders an interactive 3D DNA double hel
 This app uses ES modules from CDN and requires a local static server (do not open directly as `file://`).
 
 ```powershell
-cd C:\Users\fiker\StudioProjects\HelixViewerThingamajigger
+cd C:\Users\fiker\HelixViewerThingamajigger
 python -m http.server 8000
 ```
 

@@ -7,6 +7,11 @@ export function setupHoverInteraction({ THREE, camera, sceneRoot, domElement, to
   const baseMeshes = [];
 
   function registerBases(meshes) {
+    if (hovered) {
+      resetHighlight(hovered);
+      hovered = null;
+    }
+    hideTooltip();
     baseMeshes.length = 0;
     baseMeshes.push(...meshes);
   }
@@ -31,9 +36,10 @@ export function setupHoverInteraction({ THREE, camera, sceneRoot, domElement, to
 
   function updateTooltip(mesh, event) {
     const data = mesh.userData.baseData;
+    const rect = domElement.getBoundingClientRect();
     tooltipElement.innerHTML = `Base: <b>${data.base}</b><br>Index: <b>${data.index}</b><br>Complement: <b>${data.complement}</b>`;
-    tooltipElement.style.left = `${event.clientX + 10}px`;
-    tooltipElement.style.top = `${event.clientY - 12}px`;
+    tooltipElement.style.left = `${event.clientX - rect.left + 10}px`;
+    tooltipElement.style.top = `${event.clientY - rect.top - 12}px`;
     tooltipElement.classList.remove("hidden");
   }
 
