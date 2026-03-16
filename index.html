@@ -18,6 +18,13 @@
         <h1>DNA Helix Viewer</h1>
         <p class="subtitle">Render an interactive 3D DNA double helix in your browser.</p>
 
+        <label for="themeSelect">Theme</label>
+        <select id="themeSelect" class="theme-select">
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="lab">Lab Mode</option>
+          <option value="dark-matter">Dark Matter</option>
+        </select>
+
         <label for="sequenceInput">DNA sequence (A/T/C/G)</label>
         <textarea
           id="sequenceInput"
@@ -30,6 +37,12 @@
           <button id="generateBtn" type="button">Generate</button>
           <span id="statusText" class="status"></span>
         </div>
+
+        <section class="metrics" aria-label="Sequence statistics">
+          <h2>Sequence Stats</h2>
+          <div><span>Length</span><b id="sequenceLength">0</b></div>
+          <div><span>GC %</span><b id="gcPercent">0.0%</b></div>
+        </section>
 
         <div class="legend">
           <h2>Base Colors</h2>
@@ -45,6 +58,7 @@
         <div class="viewer-aura viewer-aura-2" aria-hidden="true"></div>
         <div id="viewer"></div>
         <div id="tooltip" class="tooltip hidden"></div>
+        <div id="clickTooltip" class="tooltip click-tooltip hidden"></div>
       </main>
     </div>
 

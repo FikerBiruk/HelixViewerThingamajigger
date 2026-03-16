@@ -2,9 +2,12 @@ import { createSceneEnvironment } from "./scene.js";
 import { BASE_COLORS, buildHelixLayoutData } from "./dna.js";
 import { setupHoverInteraction } from "./interaction.js";
 import { setupUI } from "./ui.js";
+import { setupThemeManager } from "./theme.js";
+import { createHelixAnimations } from "./animations.js";
 
 const viewerContainer = document.getElementById("viewer");
 const tooltip = document.getElementById("tooltip");
+const clickTooltip = document.getElementById("clickTooltip");
 
 const env = createSceneEnvironment(viewerContainer);
 const { THREE, scene, camera, controls, composer } = env;
@@ -12,9 +15,11 @@ const { THREE, scene, camera, controls, composer } = env;
 const rootGroup = new THREE.Group();
 scene.add(rootGroup);
 
+const animations = createHelixAnimations({ THREE });
+
 const sparkleStars = new THREE.Points(
   new THREE.BufferGeometry(),
-  new THREE.PointsMaterial({ size: 0.05, color: 0x8aa7ff, transparent: true, opacity: 0.55 })
+  new THREE.PointsMaterial({ size: 0.05, color: 0x9b8bff, transparent: true, opacity: 0.55 })
 );
 {
   const starCount = 350;
@@ -47,10 +52,10 @@ function disposeObject3D(object) {
 }
 
 function createBaseMesh(base, position, index, complement) {
-  const geometry = new THREE.SphereGeometry(0.45, 18, 18);
+  const geometry = new THREE.SphereGeometry(0.45, 16, 16);
   const material = new THREE.MeshStandardMaterial({
     color: BASE_COLORS[base],
-    roughness: 0.35,
+    roughness: 0.32,
     metalness: 0.1,
     emissive: BASE_COLORS[base],
     emissiveIntensity: 0.3,
@@ -69,15 +74,15 @@ function createBond(p1, p2) {
   const length = direction.length();
   const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
 
-  const geometry = new THREE.CylinderGeometry(0.045, 0.045, length, 10);
+  const geometry = new THREE.CylinderGeometry(0.042, 0.042, length, 8);
   const material = new THREE.MeshStandardMaterial({
-    color: 0xd9fbff,
-    emissive: 0x8be9ff,
-    emissiveIntensity: 0.7,
+    color: 0xf2d4ff,
+    emissive: 0xadf2ff,
+    emissiveIntensity: 0.8,
     roughness: 0.2,
-    metalness: 0.1,
+    metalness: 0.12,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.88,
   });
 
   const bond = new THREE.Mesh(geometry, material);
@@ -93,8 +98,8 @@ function createBackboneSegment(start, end) {
   const length = dir.length();
   const mid = new THREE.Vector3((start.x + end.x) * 0.5, (start.y + end.y) * 0.5, (start.z + end.z) * 0.5);
 
-  const geometry = new THREE.CylinderGeometry(0.13, 0.13, length, 12);
-  const material = new THREE.MeshStandardMaterial({ color: 0xb8b8d8, roughness: 0.55, metalness: 0.1 });
+  const geometry = new THREE.CylinderGeometry(0.12, 0.12, length, 10);
+  const material = new THREE.MeshStandardMaterial({ color: 0xc8cce8, roughness: 0.5, metalness: 0.08 });
   const cylinder = new THREE.Mesh(geometry, material);
 
   const up = new THREE.Vector3(0, 1, 0);
@@ -140,17 +145,19 @@ function buildHelix(sequence) {
   }
 
   rootGroup.add(helixGroup);
+  animations.prepareSnapAnimation(helixGroup);
   hover.registerBases(baseMeshes);
 }
 
 const hover = setupHoverInteraction({
   THREE,
   camera,
-  sceneRoot: rootGroup,
   domElement: env.renderer.domElement,
   tooltipElement: tooltip,
+  clickTooltipElement: clickTooltip,
 });
 
+setupThemeManager({ env });
 setupUI({ onGenerate: buildHelix });
 
 let previousTime = performance.now();
@@ -160,8 +167,12 @@ function animate(now) {
   previousTime = now;
   idleTime += dt;
 
-  rootGroup.rotation.y += dt * 0.16;
-  rootGroup.rotation.x = Math.sin(idleTime * 0.38) * 0.035;
+  rootGroup.rotation.y += dt * 0.15;
+  rootGroup.rotation.x = Math.sin(idleTime * 0.38) * 0.03;
+
+  animations.updateSnapAnimation(helixGroup, dt);
+  animations.updateBreathingAnimation(rootGroup, idleTime);
+
   controls.update();
   hover.updateHover();
   composer.render();

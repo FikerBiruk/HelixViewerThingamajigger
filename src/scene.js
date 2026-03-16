@@ -6,8 +6,8 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 
 export function createSceneEnvironment(container) {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x081318);
-  scene.fog = new THREE.Fog(0x081318, 18, 90);
+  scene.background = new THREE.Color(0x090516);
+  scene.fog = new THREE.Fog(0x090516, 18, 90);
 
   const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 200);
   camera.position.set(0, 4, 22);
@@ -26,14 +26,14 @@ export function createSceneEnvironment(container) {
   controls.minDistance = 8;
   controls.maxDistance = 55;
 
-  const ambient = new THREE.AmbientLight(0xb7fff1, 0.52);
+  const ambient = new THREE.AmbientLight(0x7f7fff, 0.44);
   scene.add(ambient);
 
-  const directional = new THREE.DirectionalLight(0xfff8e8, 1.05);
+  const directional = new THREE.DirectionalLight(0x6dfcff, 1.15);
   directional.position.set(7, 12, 10);
   scene.add(directional);
 
-  const rim = new THREE.DirectionalLight(0x8fd9ff, 0.45);
+  const rim = new THREE.DirectionalLight(0xff4fd6, 0.75);
   rim.position.set(-10, 5, -8);
   scene.add(rim);
 
@@ -65,6 +65,10 @@ export function createSceneEnvironment(container) {
     renderer,
     controls,
     composer,
+    ambientLight: ambient,
+    directionalLight: directional,
+    rimLight: rim,
+    bloomPass,
     dispose() {
       window.removeEventListener("resize", onResize);
       controls.dispose();

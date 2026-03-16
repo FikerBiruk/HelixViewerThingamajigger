@@ -36,6 +36,26 @@ export function generateComplementaryStrand(sequence) {
     .join("");
 }
 
+export function getSequenceStats(sequence) {
+  const length = sequence.length;
+  if (!length) {
+    return { length: 0, gcPercentage: 0 };
+  }
+
+  let gcCount = 0;
+  for (let i = 0; i < length; i += 1) {
+    const base = sequence[i];
+    if (base === "G" || base === "C") {
+      gcCount += 1;
+    }
+  }
+
+  return {
+    length,
+    gcPercentage: (gcCount / length) * 100,
+  };
+}
+
 export function buildHelixLayoutData(sequence, options = {}) {
   const radius = options.radius ?? 4;
   const risePerBase = options.risePerBase ?? 1.05;

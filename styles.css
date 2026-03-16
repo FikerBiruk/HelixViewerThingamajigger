@@ -1,13 +1,69 @@
 :root {
-  --bg-1: #041015;
-  --bg-2: #0a2a2b;
-  --bg-3: #051d23;
-  --panel: rgba(236, 255, 250, 0.08);
-  --panel-border: rgba(170, 234, 217, 0.26);
-  --text: #ecfff9;
-  --muted: #b4d5cd;
-  --accent: #77e8cf;
-  --accent-strong: #f6c15a;
+  --bg-1: #100824;
+  --bg-2: #130734;
+  --bg-3: #050711;
+  --panel: rgba(245, 230, 255, 0.08);
+  --panel-border: rgba(255, 109, 225, 0.34);
+  --text: #ffeafd;
+  --muted: #d3aedb;
+  --accent: #25ffe0;
+  --accent-strong: #ff57d9;
+  --panel-input-bg: rgba(29, 11, 48, 0.4);
+  --panel-card-bg: rgba(44, 12, 54, 0.44);
+  --aura-1: rgba(255, 72, 219, 0.48);
+  --aura-2: rgba(45, 253, 230, 0.38);
+  --button-text: #180725;
+}
+
+:root[data-theme="cyberpunk"] {
+  --bg-1: #100824;
+  --bg-2: #130734;
+  --bg-3: #050711;
+  --panel: rgba(245, 230, 255, 0.08);
+  --panel-border: rgba(255, 109, 225, 0.34);
+  --text: #ffeafd;
+  --muted: #d3aedb;
+  --accent: #25ffe0;
+  --accent-strong: #ff57d9;
+  --panel-input-bg: rgba(29, 11, 48, 0.4);
+  --panel-card-bg: rgba(44, 12, 54, 0.44);
+  --aura-1: rgba(255, 72, 219, 0.48);
+  --aura-2: rgba(45, 253, 230, 0.38);
+  --button-text: #180725;
+}
+
+:root[data-theme="lab"] {
+  --bg-1: #f7fbff;
+  --bg-2: #eef6ff;
+  --bg-3: #dbe9ff;
+  --panel: rgba(255, 255, 255, 0.74);
+  --panel-border: rgba(84, 141, 232, 0.32);
+  --text: #13325b;
+  --muted: #4e6b95;
+  --accent: #3f8dff;
+  --accent-strong: #69b7ff;
+  --panel-input-bg: rgba(255, 255, 255, 0.92);
+  --panel-card-bg: rgba(238, 247, 255, 0.86);
+  --aura-1: rgba(124, 192, 255, 0.34);
+  --aura-2: rgba(152, 230, 255, 0.26);
+  --button-text: #102f57;
+}
+
+:root[data-theme="dark-matter"] {
+  --bg-1: #04020b;
+  --bg-2: #13082a;
+  --bg-3: #05060f;
+  --panel: rgba(36, 24, 62, 0.28);
+  --panel-border: rgba(141, 99, 216, 0.35);
+  --text: #e9dcff;
+  --muted: #b4a4d1;
+  --accent: #8f6bff;
+  --accent-strong: #c77fff;
+  --panel-input-bg: rgba(16, 10, 32, 0.52);
+  --panel-card-bg: rgba(32, 18, 55, 0.56);
+  --aura-1: rgba(117, 74, 218, 0.4);
+  --aura-2: rgba(206, 110, 255, 0.24);
+  --button-text: #f0e9ff;
 }
 
 * {
@@ -22,8 +78,8 @@ body {
   font-family: Manrope, "Segoe UI", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 8% 16%, #0d4f5c 0%, rgba(13, 79, 92, 0) 38%),
-    radial-gradient(circle at 86% 8%, #1f5f5f 0%, rgba(31, 95, 95, 0) 42%),
+    radial-gradient(circle at 8% 16%, color-mix(in srgb, var(--aura-1) 50%, transparent 50%) 0%, transparent 38%),
+    radial-gradient(circle at 86% 8%, color-mix(in srgb, var(--aura-2) 50%, transparent 50%) 0%, transparent 42%),
     linear-gradient(132deg, var(--bg-1) 0%, var(--bg-2) 54%, var(--bg-3) 100%);
 }
 
@@ -59,26 +115,44 @@ h1 {
 
 label {
   display: block;
-  margin-bottom: 8px;
+  margin: 10px 0 8px;
   font-size: 0.95rem;
 }
 
-textarea {
+.theme-select {
+  margin-bottom: 4px;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) 52%,
+    calc(100% - 14px) 52%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  font-size: 0.95rem;
+}
+
+textarea,
+.theme-select {
   width: 100%;
   border: 1px solid var(--panel-border);
   border-radius: 14px;
-  background: rgba(3, 19, 18, 0.38);
+  background: var(--panel-input-bg);
   color: var(--text);
   padding: 12px;
-  resize: vertical;
   outline: none;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
-textarea:focus {
+textarea {
+  resize: vertical;
+}
+
+textarea:focus,
+.theme-select:focus {
   border-color: var(--accent);
-  background: rgba(2, 22, 20, 0.52);
-  box-shadow: 0 0 0 3px rgba(119, 232, 207, 0.2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 26%, transparent 74%);
 }
 
 .actions {
@@ -92,8 +166,8 @@ button {
   border: 0;
   border-radius: 999px;
   padding: 10px 16px;
-  color: #0a221c;
-  background: linear-gradient(160deg, #8ef6de 0%, #f6c15a 100%);
+  color: var(--button-text);
+  background: linear-gradient(160deg, var(--accent) 0%, var(--accent-strong) 100%);
   cursor: pointer;
   font-weight: 600;
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.27), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
@@ -111,17 +185,32 @@ button:hover {
   transition: opacity 0.16s ease;
 }
 
+.metrics,
 .legend {
   margin-top: 20px;
   padding: 12px;
   border: 1px solid var(--panel-border);
   border-radius: 14px;
-  background: rgba(8, 38, 35, 0.46);
+  background: var(--panel-card-bg);
 }
 
+.metrics h2,
 .legend h2 {
   margin: 0 0 10px;
   font-size: 1rem;
+}
+
+.metrics div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0;
+  color: var(--muted);
+}
+
+.metrics b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
 
 .legend div {
@@ -165,7 +254,7 @@ button:hover {
   height: 360px;
   top: -70px;
   right: 8%;
-  background: radial-gradient(circle at center, rgba(125, 255, 230, 0.5), rgba(125, 255, 230, 0));
+  background: radial-gradient(circle at center, var(--aura-1), rgba(255, 255, 255, 0));
   animation: drift 9s ease-in-out infinite alternate;
 }
 
@@ -174,7 +263,7 @@ button:hover {
   height: 320px;
   bottom: -80px;
   left: 10%;
-  background: radial-gradient(circle at center, rgba(255, 202, 95, 0.42), rgba(255, 202, 95, 0));
+  background: radial-gradient(circle at center, var(--aura-2), rgba(255, 255, 255, 0));
   animation: drift 11s ease-in-out infinite alternate-reverse;
 }
 
@@ -192,13 +281,18 @@ button:hover {
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid var(--panel-border);
-  background: rgba(2, 19, 18, 0.9);
+  background: color-mix(in srgb, var(--panel-card-bg) 82%, #04050a 18%);
   color: var(--text);
   font-size: 0.85rem;
   line-height: 1.4;
   transform: translate(10px, -100%);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
   transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.click-tooltip {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--panel-border) 50%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
 }
 
 .hidden {
@@ -232,4 +326,3 @@ button:hover {
     opacity: 0.35;
   }
 }
-
